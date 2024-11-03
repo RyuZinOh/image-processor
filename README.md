@@ -49,10 +49,9 @@ A Flask application that allows users to create and manage their profiles with c
 
 To run the application in a Docker container, you can pull the pre-built image and run it as follows:
 
-`docker pull safallama/imageprocessor:v1.0`
-`
-docker run -p 5000:5000 -e MONGODB_URL="mongodb://host.docker.internal:27017/<your db name>" -e SECRET_KEY="your_secret_key" safallama/imageprocessor:v1.0
-`
+`docker pull safallama/imageprocesor:v1.0`
+
+`docker run -p 5000:5000 -e MONGODB_URL="mongodb://host.docker.internal:27017/<your db name>" -e SECRET_KEY="your_secret_key" safallama/imageprocesor:v1.0`
 
 *note: your_secret_key value might be random just randomly add, and dont show that secret key to other, u created !!, giving a host.docker. is also necessary for docker to acces local mongodb .*
 

@@ -6,6 +6,9 @@ import io
 import requests
 import os
 from dotenv import load_dotenv
+from matplotlib import font_manager as fm
+import matplotlib.pyplot as plt
+
 
 load_dotenv()
 
@@ -102,6 +105,7 @@ def view_profiles():
 
     profiles = mongo.db.profileMaximus.find()
     return render_template('view_profiles.html', profiles=profiles)
+
 @app.route('/generate_profile_image/<username>')
 def generate_profile_image(username):
     user = mongo.db.profileMaximus.find_one({"username": username})
@@ -155,29 +159,27 @@ def generate_profile_image(username):
     title_text = f"{user['title']}" if user.get('title') else "N/A"
     username_text = f"{user['username']}"
 
-    font_path = "arial.ttf"
-    try:
-        # Increase font size for username and title
-        font = ImageFont.truetype(font_path, 40)  # Changed from 30 to 40
-        draw.text((50, 570), username_text, fill="white", font=font)
-        draw.text((50, 620), title_text, fill="white", font=font)
-    except IOError:
-        print("Font file not found. Using default font.")
-        font = ImageFont.load_default()
-        draw.text((50, 570), username_text, fill="white", font=font)
-        draw.text((50, 620), title_text, fill="white", font=font)
+    # Load the Arial font from matplotlib
+    font_path = fm.findfont(fm.FontProperties(family='Arial'))
+    
+    # Use the font to create ImageFont object
+    title_font = ImageFont.truetype(font_path, 40)  # Changed font size to 40
+    username_font = ImageFont.truetype(font_path, 40)  # Changed font size to 40
+
+    draw.text((50, 570), username_text, fill="white", font=username_font)
+    draw.text((50, 620), title_text, fill="white", font=title_font)
 
     copyright_text = "@safallama"
-    try:
-        copyright_font = ImageFont.truetype(font_path, 20)
-        draw.text((1250, 880), copyright_text, fill="white", font=copyright_font)
-    except IOError:
-        draw.text((1250, 880), copyright_text, fill="white", font=font)
+    copyright_font = ImageFont.truetype(font_path, 20)
+
+    draw.text((1250, 880), copyright_text, fill="white", font=copyright_font)
 
     img_io = io.BytesIO()
     background.save(img_io, 'PNG')
     img_io.seek(0)
 
     return send_file(img_io, mimetype='image/png')
+
+
 if __name__ == '__main__':
     app.run(debug=True)
