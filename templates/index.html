@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Index</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='dragon_shadow.png') }}" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome, {{ session['username'] }}</h1>
+        <button onclick="showGenerateProfileForm()">Generate Profile</button>
+        <button onclick="editProfile()">Edit Profile</button>
+        <button onclick="deleteProfile()">Delete Profile</button>
+        <button onclick="viewProfiles()">View Profiles</button>
+        <p><a href="{{ url_for('logout') }}">Logout</a></p>
+
+        <div id="profileForm" style="display: none;">
+            <h2>Generate Profile</h2>
+            <form id="generateProfile" onsubmit="submitProfile(event)">
+                <input type="text" id="avatarUrl" placeholder="Avatar URL" required>
+                <input type="text" id="backgroundUrl" placeholder="Background URL" required>
+                <input type="text" id="cardImageUrl" placeholder="Card Image URL" required>
+                <input type="text" id="title" placeholder="Title" required>
+                <button type="submit">Submit</button>
+                <button type="button" onclick="hideGenerateProfileForm()">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function showGenerateProfileForm() {
+            document.getElementById('profileForm').style.display = 'block';
+        }
+
+        function hideGenerateProfileForm() {
+            document.getElementById('profileForm').style.display = 'none';
+        }
+
+        function submitProfile(event) {
+            event.preventDefault();
+
+            const avatarUrl = document.getElementById('avatarUrl').value;
+            const backgroundUrl = document.getElementById('backgroundUrl').value;
+            const cardImageUrl = document.getElementById('cardImageUrl').value;
+            const title = document.getElementById('title').value;
+
+            fetch('/generate_profile', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    avatar_url: avatarUrl,
+                    background_url: backgroundUrl,
+                    card_image_url: cardImageUrl,
+                    title: title
+                })
+            }).then(response => response.json())
+              .then(data => {
+                  alert(data.message);
+                  if (data.message === 'Profile updated successfully!') {
+                      hideGenerateProfileForm();
+                  }
+              }).catch(error => {
+                  console.error('Error:', error);
+                  alert('An error occurred while updating the profile.');
+              });
+        }
+
+        function editProfile() {
+            alert("Edit Profile functionality to be implemented.");
+        }
+
+        function deleteProfile() {
+            if (confirm("Are you sure you want to delete your profile? This action cannot be undone.")) {
+                alert("Profile deleted.");
+            }
+        }
+
+        function viewProfiles() {
+            window.location.href = '/view_profiles';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Profiles</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='dragon_shadow.png') }}" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>All Profiles</h1>
+        <p><a href="{{ url_for('dashboard') }}">Back to Dashboard</a></p>
+        <div class="profiles">
+            {% for profile in profiles %}
+                <div class="profile-card">
+                    <strong>{{ profile.username }}</strong>
+                    <p>Title: {{ profile.title }}</p>
+                    <div class="profile-images">
+                        <img src="{{ profile.avatar_url }}" alt="Avatar" class="avatar">
+                        <img src="{{ profile.background_url }}" alt="Background" class="background">
+                        <img src="{{ profile.card_image_url }}" alt="Card Image" class="card-image">
+                    </div>
+                    <a href="{{ url_for('generate_profile_image', username=profile.username) }}" class="generate-button">Generate Profile Image</a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <style>
+        .profiles {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .profile-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 250px;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+
+        .profile-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .profile-images {
+            margin: 10px 0;
+        }
+
+        .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid #5cb85c;
+        }
+
+        .background {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+            margin-top: 5px;
+        }
+
+        .card-image {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+            margin-top: 5px;
+        }
+
+        .generate-button {
+            display: inline-block;
+            padding: 10px 15px;
+            background-color: #5cb85c;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .generate-button:hover {
+            background-color: #4cae4c;
+        }
+    </style>
+</body>
+</html>
