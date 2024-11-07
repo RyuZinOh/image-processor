@@ -58,3 +58,7 @@ To run the application in a Docker container, you can pull the pre-built image a
 ## do i need help?
 
 *ofc, u can modify change, and ask a pull req, i wil check and add accordingly if its good*
+
+
+## warning
+docker image doesnt focus on ui/ux as it was a prototype but is  functioing when u use a correct behaviour as above mentioned
