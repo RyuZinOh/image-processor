@@ -163,7 +163,7 @@ def generate_profile_image(username):
     font_path = fm.findfont(fm.FontProperties(family='Poppins'))
     
     # Use the font to create ImageFont object
-    title_font = ImageFont.truetype(font_path, 30)  # Changed font size to 40
+    title_font = ImageFont.truetype(font_path, 25)  # Changed font size to 25
     username_font = ImageFont.truetype(font_path, 40)  # Changed font size to 40
 
     draw.text((50, 570), username_text, fill="white", font=username_font)
