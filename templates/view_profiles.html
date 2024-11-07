@@ -1,93 +1,219 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>View Profiles</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link rel="icon" href="{{ url_for('static', filename='dragon_shadow.png') }}" type="image/png">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-</head>
-<body>
-    <div class="container">
-        <h1>All Profiles</h1>
-        <p><a href="{{ url_for('dashboard') }}">Back to Dashboard</a></p>
-        <div class="profiles">
-            {% for profile in profiles %}
-                <div class="profile-card">
-                    <strong>{{ profile.username }}</strong>
-                    <p>Title: {{ profile.title }}</p>
-                    <div class="profile-images">
-                        <img src="{{ profile.avatar_url }}" alt="Avatar" class="avatar">
-                        <img src="{{ profile.background_url }}" alt="Background" class="background">
-                        <img src="{{ profile.card_image_url }}" alt="Card Image" class="card-image">
-                    </div>
-                    <a href="{{ url_for('generate_profile_image', username=profile.username) }}" class="generate-button">Generate Profile Image</a>
-                </div>
-            {% endfor %}
-        </div>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+    <link
+      rel="icon"
+      href="{{ url_for('static', filename='dragon_shadow.png') }}"
+      type="image/png"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <!-- AOS Library -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>
+      // Initialize AOS (Animate On Scroll)
+      document.addEventListener("DOMContentLoaded", function () {
+        AOS.init({
+          duration: 1000,
+          easing: "ease-in-out",
+          once: false,
+        });
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.7.0/dist/vanilla-tilt.min.js"></script>
+  </head>
+  <body>
+    <!-- Header Section -->
+    <header>
+      <h1 data-aos="zoom-in" data-aos-delay="100">All Profiles</h1>
+    </header>
+
+    <!-- Profiles Display Section -->
+    <div class="profiles">
+      {% for profile in profiles %}
+      <div
+        class="profile-card"
+        data-aos="flip-up"
+        data-aos-delay="{{ loop.index * 150 }}"
+        data-tilt
+        data-tilt-scale="1.05"
+      >
+        <img
+          src="{{ profile.avatar_url }}"
+          alt="Avatar"
+          class="avatar"
+          data-aos="zoom-in-up"
+          data-aos-delay="300"
+        />
+        <a
+          href="{{ url_for('generate_profile_image', username=profile.username) }}"
+          class="generate-button"
+          data-aos="fade-up"
+          data-aos-delay="400"
+          >Generate Profile Image</a
+        >
+      </div>
+      {% endfor %}
     </div>
 
+    <!-- Back to Dashboard Button (Positioned at Bottom Right) -->
+    <a href="{{ url_for('dashboard') }}" class="back-button"
+      >Back to Dashboard</a
+    >
+
+    <!-- JavaScript for Vanilla Tilt (Profile Card Effect) -->
+    <script>
+      VanillaTilt.init(document.querySelectorAll(".profile-card"), {
+        max: 12,
+        speed: 400,
+        glare: true,
+        "max-glare": 0.2,
+      });
+    </script>
+
+    <!-- Styling -->
     <style>
+      /* General Styling */
+      html {
+        scroll-behavior: smooth;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        background-color: #f0f4f8;
+        color: #333;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+        padding-bottom: 50px;
+      }
+
+      /* Header Section */
+      header {
+        text-align: center;
+        margin: 40px 0 30px;
+      }
+
+      h1 {
+        font-size: 42px;
+        color: #333;
+        font-weight: 600;
+      }
+
+      /* Profiles Container*/
+      .profiles {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 20px;
+        padding: 20px;
+        max-width: 1000px;
+        width: 90%;
+        margin: initial;
+      }
+
+      /* Profile Card Styling */
+      .profile-card {
+        background: #fff;
+        border-radius: 15px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        padding: 20px;
+        text-align: center;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        position: relative;
+      }
+
+      /* Profile Card Hover Effect */
+      .profile-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+      }
+
+      /* Avatar Image */
+      .avatar {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin: 10px auto;
+        border: 3px solid #eee;
+        transition: transform 0.3s ease;
+      }
+
+      .profile-card:hover .avatar {
+        transform: scale(1.1);
+      }
+
+      /* Generate Button Styling */
+      .generate-button {
+        display: inline-block;
+        padding: 8px 14px;
+        background-color: #333;
+        color: #fff;
+        border-radius: 20px;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 500;
+        transition: background-color 0.3s, transform 0.3s;
+        margin-top: 10px;
+      }
+
+      .generate-button:hover {
+        background-color: #555;
+        transform: translateY(-2px);
+      }
+
+      /* Responsive Design*/
+      @media (max-width: 600px) {
         .profiles {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            justify-content: center;
+          grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
         }
+      }
 
-        .profile-card {
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            width: 250px;
-            text-align: center;
-            transition: transform 0.2s;
-        }
+      /* Back Button Styling (Positioned at the bottom-right) */
+      .back-button {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        font-size: 16px;
+        color: #fff;
+        background-color: #000000;
+        padding: 12px 24px;
+        border-radius: 30px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        z-index: 9999;
+        border: 2px solid rgb(255, 255, 255);
+      }
 
-        .profile-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .profile-images {
-            margin: 10px 0;
-        }
-
-        .avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            border: 2px solid #5cb85c;
-        }
-
-        .background {
-            width: 100%;
-            height: auto;
-            border-radius: 5px;
-            margin-top: 5px;
-        }
-
-        .card-image {
-            width: 100%;
-            height: auto;
-            border-radius: 5px;
-            margin-top: 5px;
-        }
-
-        .generate-button {
-            display: inline-block;
-            padding: 10px 15px;
-            background-color: #5cb85c;
-            color: white;
-            border-radius: 5px;
-            text-decoration: none;
-            transition: background-color 0.3s;
-        }
-
-        .generate-button:hover {
-            background-color: #4cae4c;
-        }
+      .back-button:hover {
+        background-color: #ffffff;
+        color: #000000;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+      }
     </style>
-</body>
+  </body>
 </html>

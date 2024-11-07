@@ -117,7 +117,7 @@ def generate_profile_image(username):
 
     if user.get('background_url'):
         try:
-            background_image = Image.open(requests.get(user['background_url'], stream=True).raw).convert("RGBA").resize((1440, 460))
+            background_image = Image.open(requests.get(user['background_url'], stream=True).raw).convert("RGBA").resize((1440, 470))
             background.paste(background_image, (0, 0))
         except Exception as e:
             print(f"Error loading background image: {e}")
@@ -141,10 +141,10 @@ def generate_profile_image(username):
 
     if user.get('card_image_url'):
         try:
-            card_image = Image.open(requests.get(user['card_image_url'], stream=True).raw).convert("RGBA").resize((250, 500))
+            card_image = Image.open(requests.get(user['card_image_url'], stream=True).raw).convert("RGBA").resize((390, 690))
             tilted_card = card_image.rotate(-10, expand=True)
-            card_x = 1100
-            card_y = 100
+            card_x = 900
+            card_y = 94
             background.paste(tilted_card, (card_x, card_y), tilted_card)
         except Exception as e:
             print(f"Error loading card image: {e}")
@@ -160,10 +160,10 @@ def generate_profile_image(username):
     username_text = f"{user['username']}"
 
     # Load the Arial font from matplotlib
-    font_path = fm.findfont(fm.FontProperties(family='Arial'))
+    font_path = fm.findfont(fm.FontProperties(family='Poppins'))
     
     # Use the font to create ImageFont object
-    title_font = ImageFont.truetype(font_path, 40)  # Changed font size to 40
+    title_font = ImageFont.truetype(font_path, 30)  # Changed font size to 40
     username_font = ImageFont.truetype(font_path, 40)  # Changed font size to 40
 
     draw.text((50, 570), username_text, fill="white", font=username_font)

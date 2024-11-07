@@ -1,88 +1,199 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Index</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link rel="icon" href="{{ url_for('static', filename='dragon_shadow.png') }}" type="image/png">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-</head>
-<body>
-    <div class="container">
-        <h1>Welcome, {{ session['username'] }}</h1>
-        <button onclick="showGenerateProfileForm()">Generate Profile</button>
-        <button onclick="editProfile()">Edit Profile</button>
-        <button onclick="deleteProfile()">Delete Profile</button>
-        <button onclick="viewProfiles()">View Profiles</button>
-        <p><a href="{{ url_for('logout') }}">Logout</a></p>
+    <link
+      href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+    <link
+      rel="icon"
+      href="{{ url_for('static', filename='dragon_shadow.png') }}"
+      type="image/png"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+      rel="stylesheet"
+    />
+  </head>
 
-        <div id="profileForm" style="display: none;">
-            <h2>Generate Profile</h2>
-            <form id="generateProfile" onsubmit="submitProfile(event)">
-                <input type="text" id="avatarUrl" placeholder="Avatar URL" required>
-                <input type="text" id="backgroundUrl" placeholder="Background URL" required>
-                <input type="text" id="cardImageUrl" placeholder="Card Image URL" required>
-                <input type="text" id="title" placeholder="Title" required>
-                <button type="submit">Submit</button>
-                <button type="button" onclick="hideGenerateProfileForm()">Cancel</button>
-            </form>
-        </div>
+  <style>
+    .container {
+      text-align: center;
+    }
+    .icon {
+      margin-top: 100px;
+      font-size: 40px;
+      color: #000000; /* Flask icon color */
+    }
+    .typed-output {
+      font-size: 24px;
+      font-weight: bold;
+      margin-top: 100px;
+    }
+  </style>
+  <body>
+    <!-- Header Navigation -->
+    <header>
+      <div class="logo">
+        <h1>{{ session['username'] }}</h1>
+      </div>
+      <nav>
+        <ul>
+          <li>
+            <button onclick="showGenerateProfileForm()">
+              Generate Profile
+            </button>
+          </li>
+          <li><button onclick="editProfile()">Edit Profile</button></li>
+          <li><button onclick="deleteProfile()">Delete Profile</button></li>
+          <li><button onclick="viewProfiles()">View Profiles</button></li>
+        </ul>
+      </nav>
+    </header>
+
+    <div class="container" id="container">
+      <!-- Flask icon with AOS -->
+      <div class="icon" data-aos="fade-up" data-aos-delay="200">
+        <i class="fas fa-flask"></i>
+      </div>
+      <!-- Typing text with AOS -->
+      <div
+        id="typed-output"
+        class="typed-output"
+        data-aos="fade-in"
+        data-aos-delay="400"
+      ></div>
     </div>
 
+    <!-- Profile generation form with AOS -->
+    <div
+      id="profileForm"
+      style="display: none"
+      data-aos="fade-up"
+      data-aos-delay="600"
+    >
+      <h2>Generate Profile</h2>
+      <form id="generateProfile" onsubmit="submitProfile(event)">
+        <input type="text" id="avatarUrl" placeholder="Avatar URL" required />
+        <input
+          type="text"
+          id="backgroundUrl"
+          placeholder="Background URL"
+          required
+        />
+        <input
+          type="text"
+          id="cardImageUrl"
+          placeholder="Card Image URL"
+          required
+        />
+        <input type="text" id="title" placeholder="Title" required />
+        <button type="submit"><i class="fas fa-check"></i> Submit</button>
+        <button type="button" onclick="hideGenerateProfileForm()">
+          <i class="fas fa-times"></i> Cancel
+        </button>
+      </form>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <p>&copy; 2024 Your Website. All rights reserved.</p>
+    </footer>
+
+    <!-- Logout button at the bottom-right -->
+    <a href="{{ url_for('logout') }}" class="logout-btn">
+      <i class="fas fa-sign-out-alt"></i> Logout
+    </a>
+
     <script>
-        function showGenerateProfileForm() {
-            document.getElementById('profileForm').style.display = 'block';
-        }
+      // Initialize the Typed.js effect
+      var options = {
+        strings: ["Welcome to image processing application made on Flask."],
+        typeSpeed: 50,
+        backSpeed: 25,
+        backDelay: 1000,
+        startDelay: 500,
+        loop: false,
+        showCursor: false,
+      };
 
-        function hideGenerateProfileForm() {
-            document.getElementById('profileForm').style.display = 'none';
-        }
-
-        function submitProfile(event) {
-            event.preventDefault();
-
-            const avatarUrl = document.getElementById('avatarUrl').value;
-            const backgroundUrl = document.getElementById('backgroundUrl').value;
-            const cardImageUrl = document.getElementById('cardImageUrl').value;
-            const title = document.getElementById('title').value;
-
-            fetch('/generate_profile', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    avatar_url: avatarUrl,
-                    background_url: backgroundUrl,
-                    card_image_url: cardImageUrl,
-                    title: title
-                })
-            }).then(response => response.json())
-              .then(data => {
-                  alert(data.message);
-                  if (data.message === 'Profile updated successfully!') {
-                      hideGenerateProfileForm();
-                  }
-              }).catch(error => {
-                  console.error('Error:', error);
-                  alert('An error occurred while updating the profile.');
-              });
-        }
-
-        function editProfile() {
-            alert("Edit Profile functionality to be implemented.");
-        }
-
-        function deleteProfile() {
-            if (confirm("Are you sure you want to delete your profile? This action cannot be undone.")) {
-                alert("Profile deleted.");
-            }
-        }
-
-        function viewProfiles() {
-            window.location.href = '/view_profiles';
-        }
+      var typed = new Typed("#typed-output", options);
     </script>
-</body>
+
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>
+      // Initialize AOS
+      AOS.init({
+        duration: 1000,
+        easing: "ease-in-out",
+        once: true,
+      });
+
+      function showGenerateProfileForm() {
+        document.getElementById("container").style.display = "none";
+        document.getElementById("profileForm").style.display = "block";
+      }
+
+      function hideGenerateProfileForm() {
+        document.getElementById("profileForm").style.display = "none";
+      }
+
+      function submitProfile(event) {
+        event.preventDefault();
+
+        const avatarUrl = document.getElementById("avatarUrl").value;
+        const backgroundUrl = document.getElementById("backgroundUrl").value;
+        const cardImageUrl = document.getElementById("cardImageUrl").value;
+        const title = document.getElementById("title").value;
+
+        fetch("/generate_profile", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            avatar_url: avatarUrl,
+            background_url: backgroundUrl,
+            card_image_url: cardImageUrl,
+            title: title,
+          }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            alert(data.message);
+            if (data.message === "Profile updated successfully!") {
+              hideGenerateProfileForm();
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            alert("An error occurred while updating the profile.");
+          });
+      }
+
+      function editProfile() {
+        alert("Edit Profile functionality to be implemented.");
+      }
+
+      function deleteProfile() {
+        alert("Delete function is pending to add.");
+      }
+
+      function viewProfiles() {
+        window.location.href = "/view_profiles";
+      }
+    </script>
+  </body>
 </html>
