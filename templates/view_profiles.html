@@ -17,31 +17,51 @@
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
       rel="stylesheet"
     />
-    <!-- AOS Library -->
     <link
       href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css"
       rel="stylesheet"
     />
     <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
     <script>
-      // Initialize AOS (Animate On Scroll)
       document.addEventListener("DOMContentLoaded", function () {
         AOS.init({
           duration: 1000,
           easing: "ease-in-out",
           once: false,
         });
+
+        document
+          .getElementById("searchBox")
+          .addEventListener("input", function () {
+            const searchTerm = this.value.toLowerCase();
+            const profileCards = document.querySelectorAll(".profile-card");
+            profileCards.forEach(function (card) {
+              const username = card
+                .querySelector(".username p")
+                .textContent.toLowerCase();
+              if (username.includes(searchTerm)) {
+                card.style.display = "block";
+              } else {
+                card.style.display = "none";
+              }
+            });
+          });
       });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.7.0/dist/vanilla-tilt.min.js"></script>
   </head>
   <body>
-    <!-- Header Section -->
     <header>
       <h1 data-aos="zoom-in" data-aos-delay="100">All Profiles</h1>
     </header>
-
-    <!-- Profiles Display Section -->
+    <div class="search-container">
+      <input
+        type="text"
+        id="searchBox"
+        placeholder="Search for a username..."
+        class="search-box"
+      />
+    </div>
     <div class="profiles">
       {% for profile in profiles %}
       <div
@@ -58,6 +78,9 @@
           data-aos="zoom-in-up"
           data-aos-delay="300"
         />
+        <div class="username" data-aos="fade-up" data-aos-delay="400">
+          <p>{{ profile.username }}</p>
+        </div>
         <a
           href="{{ url_for('generate_profile_image', username=profile.username) }}"
           class="generate-button"
@@ -68,13 +91,9 @@
       </div>
       {% endfor %}
     </div>
-
-    <!-- Back to Dashboard Button (Positioned at Bottom Right) -->
     <a href="{{ url_for('dashboard') }}" class="back-button"
       >Back to Dashboard</a
     >
-
-    <!-- JavaScript for Vanilla Tilt (Profile Card Effect) -->
     <script>
       VanillaTilt.init(document.querySelectorAll(".profile-card"), {
         max: 12,
@@ -83,10 +102,7 @@
         "max-glare": 0.2,
       });
     </script>
-
-    <!-- Styling -->
     <style>
-      /* General Styling */
       html {
         scroll-behavior: smooth;
       }
@@ -108,7 +124,6 @@
         padding-bottom: 50px;
       }
 
-      /* Header Section */
       header {
         text-align: center;
         margin: 40px 0 30px;
@@ -120,7 +135,27 @@
         font-weight: 600;
       }
 
-      /* Profiles Container*/
+      .search-container {
+        width: 90%;
+        max-width: 500px;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+
+      .search-box {
+        padding: 10px;
+        width: 100%;
+        font-size: 16px;
+        border-radius: 25px;
+        border: 2px solid #ddd;
+        outline: none;
+        transition: border 0.3s;
+      }
+
+      .search-box:focus {
+        border-color: #333;
+      }
+
       .profiles {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -131,7 +166,6 @@
         margin: initial;
       }
 
-      /* Profile Card Styling */
       .profile-card {
         background: #fff;
         border-radius: 15px;
@@ -144,13 +178,30 @@
         position: relative;
       }
 
-      /* Profile Card Hover Effect */
+      .username {
+        position: absolute;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 18px;
+        font-weight: bold;
+        color: #333;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0s 0.3s;
+      }
+
+      .profile-card:hover .username {
+        opacity: 1;
+        visibility: visible;
+        transition: opacity 0.3s ease;
+      }
+
       .profile-card:hover {
         transform: translateY(-5px);
         box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
       }
 
-      /* Avatar Image */
       .avatar {
         width: 100px;
         height: 100px;
@@ -165,7 +216,6 @@
         transform: scale(1.1);
       }
 
-      /* Generate Button Styling */
       .generate-button {
         display: inline-block;
         padding: 8px 14px;
@@ -184,14 +234,12 @@
         transform: translateY(-2px);
       }
 
-      /* Responsive Design*/
       @media (max-width: 600px) {
         .profiles {
           grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
         }
       }
 
-      /* Back Button Styling (Positioned at the bottom-right) */
       .back-button {
         position: fixed;
         bottom: 30px;
