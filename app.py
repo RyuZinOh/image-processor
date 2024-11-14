@@ -126,7 +126,12 @@ def generate_profile_image(username):
 
     if user.get('background_url'):
         try:
-            background_image = Image.open(requests.get(user['background_url'], stream=True).raw).convert("RGBA").resize((1440, 470))
+            background_image = Image.open(requests.get(user['background_url'], stream=True).raw).convert("RGBA")
+            
+            width_percent = (552 / float(background_image.size[1]))
+            new_width = int((float(background_image.size[0]) * float(width_percent)))
+            background_image = background_image.resize((new_width, 552))
+            
             background.paste(background_image, (0, 0))
         except Exception as e:
             print(f"Error loading background image: {e}")
@@ -167,7 +172,7 @@ def generate_profile_image(username):
 
     title_text = f"{user['title']}" if user.get('title') else "N/A"
     username_text = f"{user['username']}"
-
+    
     font_path = fm.findfont(fm.FontProperties(family='Poppins'))
     title_font = ImageFont.truetype(font_path, 25)
     username_font = ImageFont.truetype(font_path, 40)
