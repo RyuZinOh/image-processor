@@ -17,9 +17,11 @@ app.config["MONGO_URI"] = os.getenv("MONGODB_URL")
 app.secret_key = os.getenv("SECRET_KEY")
 mongo = PyMongo(app)
 
-@app.route('/')
+@app.route('/', methods=['GET'])
 def home():
-    return redirect(url_for('login'))
+    if 'username' in session:
+        return redirect(url_for('dashboard'))
+    return render_template('login.html')
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -47,6 +49,9 @@ def register():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    if 'username' in session:
+        return redirect(url_for('dashboard'))
+
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -108,6 +113,10 @@ def view_profiles():
 
 @app.route('/generate_profile_image/<username>')
 def generate_profile_image(username):
+    if 'username' not in session:
+        flash("You need to log in first.")
+        return redirect(url_for('login'))
+
     user = mongo.db.profileMaximus.find_one({"username": username})
 
     if user is None:
@@ -159,12 +168,9 @@ def generate_profile_image(username):
     title_text = f"{user['title']}" if user.get('title') else "N/A"
     username_text = f"{user['username']}"
 
-    # Load the Arial font from matplotlib
     font_path = fm.findfont(fm.FontProperties(family='Poppins'))
-    
-    # Use the font to create ImageFont object
-    title_font = ImageFont.truetype(font_path, 25)  # Changed font size to 25
-    username_font = ImageFont.truetype(font_path, 40)  # Changed font size to 40
+    title_font = ImageFont.truetype(font_path, 25)
+    username_font = ImageFont.truetype(font_path, 40)
 
     draw.text((50, 570), username_text, fill="white", font=username_font)
     draw.text((50, 620), title_text, fill="white", font=title_font)
@@ -181,8 +187,12 @@ def generate_profile_image(username):
     return send_file(img_io, mimetype='image/png')
 
 
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, debug=True)
 
-
-keep_alive()
+# keep_alive()
