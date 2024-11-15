@@ -39,11 +39,9 @@
               const username = card
                 .querySelector(".username p")
                 .textContent.toLowerCase();
-              if (username.includes(searchTerm)) {
-                card.style.display = "block";
-              } else {
-                card.style.display = "none";
-              }
+              card.style.display = username.includes(searchTerm)
+                ? "block"
+                : "none";
             });
           });
       });
@@ -88,6 +86,13 @@
           data-aos-delay="400"
           >Generate Profile Image</a
         >
+        <a
+          href="{{ url_for('download_profile_image', username=profile.username) }}"
+          class="download-button"
+          data-aos="fade-up"
+          data-aos-delay="500"
+          >Download Profile Image</a
+        >
       </div>
       {% endfor %}
     </div>
@@ -106,16 +111,14 @@
       html {
         scroll-behavior: smooth;
       }
-
       * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
       }
-
       body {
         font-family: "Poppins", sans-serif;
-        background-color: #f0f4f8;
+        background-color: #ffffff;
         color: #333;
         display: flex;
         flex-direction: column;
@@ -123,25 +126,22 @@
         min-height: 100vh;
         padding-bottom: 50px;
       }
-
       header {
         text-align: center;
         margin: 40px 0 30px;
+        border: #000000;
       }
-
       h1 {
         font-size: 42px;
         color: #333;
         font-weight: 600;
       }
-
       .search-container {
         width: 90%;
         max-width: 500px;
         margin-bottom: 20px;
         text-align: center;
       }
-
       .search-box {
         padding: 10px;
         width: 100%;
@@ -151,11 +151,9 @@
         outline: none;
         transition: border 0.3s;
       }
-
       .search-box:focus {
         border-color: #333;
       }
-
       .profiles {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -165,7 +163,6 @@
         width: 90%;
         margin: initial;
       }
-
       .profile-card {
         background: #fff;
         border-radius: 15px;
@@ -177,7 +174,6 @@
         cursor: pointer;
         position: relative;
       }
-
       .username {
         position: absolute;
         top: 10px;
@@ -190,18 +186,15 @@
         visibility: hidden;
         transition: opacity 0.3s ease, visibility 0s 0.3s;
       }
-
       .profile-card:hover .username {
         opacity: 1;
         visibility: visible;
         transition: opacity 0.3s ease;
       }
-
       .profile-card:hover {
         transform: translateY(-5px);
         box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
       }
-
       .avatar {
         width: 100px;
         height: 100px;
@@ -211,33 +204,30 @@
         border: 3px solid #eee;
         transition: transform 0.3s ease;
       }
-
       .profile-card:hover .avatar {
         transform: scale(1.1);
       }
-
-      .generate-button {
+      .generate-button,
+      .download-button {
         display: inline-block;
-        padding: 8px 14px;
+        padding: 10px 18px;
         background-color: #333;
         color: #fff;
-        border-radius: 20px;
+        border-radius: 25px;
         text-decoration: none;
-        font-size: 14px;
+        font-size: 12px;
         font-weight: 500;
-        transition: background-color 0.3s, transform 0.3s;
-        margin-top: 10px;
+        transition: background-color 0.5s ease-in-out, transform 0.3s ease,
+          color 0.4s ease, border-color 0.3s ease;
+        margin-top: 12px;
       }
 
-      .generate-button:hover {
-        background-color: #555;
-        transform: translateY(-2px);
-      }
-
-      @media (max-width: 600px) {
-        .profiles {
-          grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-        }
+      .generate-button:hover,
+      .download-button:hover {
+        background-color: #ffffff;
+        transform: translateY(-4px);
+        color: black;
+        border: 2px solid black;
       }
 
       .back-button {
@@ -255,7 +245,6 @@
         z-index: 9999;
         border: 2px solid rgb(255, 255, 255);
       }
-
       .back-button:hover {
         background-color: #ffffff;
         color: #000000;
