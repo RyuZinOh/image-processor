@@ -8,7 +8,7 @@ import os
 from dotenv import load_dotenv
 from matplotlib import font_manager as fm
 import matplotlib.pyplot as plt
-from keep_alive import keep_alive
+
 
 load_dotenv()
 
@@ -306,4 +306,3 @@ def page_not_found(e):
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, debug=True)
 
-keep_alive()
