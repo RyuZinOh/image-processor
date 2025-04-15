@@ -1,6 +1,6 @@
-## imageProcessor
+# Image Processor
 
-## **Local Setup**
+## 📥 Local Setup
 
 ### 1. Clone the Repository
 ```bash
@@ -14,56 +14,57 @@ pip install -r requirements.txt
 ```
 
 ### 3. Configure Environment Variables
-Create a `.env` file in the root directory with the following:
-```env
-MONGODB_URL="your_mongodb_connection_string"
-SECRET_KEY="your_secret_key"
-```
-*(Replace placeholders with actual values.)*
+Create a `.env` file with the following variables:
+
+| Variable        | Description                          | Example Value                          |
+|-----------------|--------------------------------------|----------------------------------------|
+| `MONGODB_URL`   | MongoDB connection string            | `mongodb://localhost:27017/your_db`    |
+| `SECRET_KEY`    | Secret key for application security  | `your_random_secret_key_here`          |
 
 ### 4. Run the Application
 ```bash
-python app.py  
+python app.py
 ```
-The app should start at `http://localhost:5000`.
+Access the app at:  
+🌐 [http://localhost:8080](http://localhost:8080)
 
 ---
 
-## **Docker Setup**
+## 🐳 Docker Setup
 
 ### Option 1: Use Pre-Built Image from Docker Hub
-1. Pull the image:
-   ```bash
-   docker pull safallama/imageprocessor
-   ```
-2. Run the container:
-   ```bash
-   docker run -p 5000:5000 \
-     -e MONGODB_URL="mongodb://host.docker.internal:27017/your_db" \
-     -e SECRET_KEY="your_secret_key" \
-     safallama/imageprocessor:tagname
-   ```
+```bash
+docker pull safallama/imageprocessor
+docker run -p 5000:5000 \
+  -e MONGODB_URL="mongodb://host.docker.internal:27017/your_db" \
+  -e SECRET_KEY="your_secret_key" \
+  safallama/imageprocessor:tagname
+```
 
 ### Option 2: Build Your Own Image
-1. Build the Docker image (from the project root):
-   ```bash
-   docker build -t yourusername/imageprocessor .
-   ```
-2. Run the container:
-   ```bash
-   docker run -p 5000:5000 \
-     -e MONGODB_URL="mongodb://host.docker.internal:27017/your_db" \
-     -e SECRET_KEY="your_secret_key" \
-     yourusername/imageprocessor
-   ```
+```bash
+# Build the image
+docker build -t yourusername/imageprocessor .
+
+# Run the container
+docker run -p 5000:5000 \
+  -e MONGODB_URL="mongodb://host.docker.internal:27017/your_db" \
+  -e SECRET_KEY="your_secret_key" \
+  yourusername/imageprocessor
+```
 
 ---
 
-## **Notes**
-- For MongoDB inside Docker, ensure the connection string matches your setup (e.g., use `host.docker.internal` for local MongoDB on the host machine).
+## 📝 Notes & Configuration
+
+| Configuration              | Details                                                                 |
+|---------------------------|-------------------------------------------------------------------------|
+| **MongoDB in Docker**     | Use `host.docker.internal` to connect to local MongoDB on host machine  |
+| **Port Mapping**          | Host `5000` → Container `5000`                                          |
+| **Image Tags**            | Replace `tagname` with specific version if needed                       |
 
 ---
 
-## **Screenshot**
+## 🖼️ Screenshot
 ![App Preview](static/safal_profile.png)
 
