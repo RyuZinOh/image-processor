@@ -36,11 +36,7 @@ Access the app at:
 
 ### Option 1: Use Pre-Built Image from Docker Hub
 ```bash
-docker pull safallama/imageprocessor
-docker run -p 5000:5000 \
-  -e MONGODB_URL="mongodb://host.docker.internal:27017/your_db" \
-  -e SECRET_KEY="your_secret_key" \
-  safallama/imageprocessor:tagname
+docker pull safallama/imageprocessor && docker run -p 5000:5000 -e MONGODB_URL="mongodb://host.docker.internal:27017/your_db" -e SECRET_KEY="your_secret_key" safallama/imageprocessor:tagname
 ```
 
 ### Option 2: Build Your Own Image
@@ -49,10 +45,8 @@ docker run -p 5000:5000 \
 docker build -t yourusername/imageprocessor .
 
 # Run the container
-docker run -p 5000:5000 \
-  -e MONGODB_URL="mongodb://host.docker.internal:27017/your_db" \
-  -e SECRET_KEY="your_secret_key" \
-  yourusername/imageprocessor
+docker run -p 5000:5000 -e MONGODB_URL="mongodb://host.docker.internal:27017/your_db" -e SECRET_KEY="your_secret_key" yourusername/imageprocessor
+
 ```
 
 ---
